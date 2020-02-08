@@ -64,7 +64,7 @@ public class PlayerHelper
         World world = player.world;
         Random rand = world.rand;
 
-        if (!world.isSkyLightMax(player.getPosition())) return;
+        if (!world.canSeeSky(player.getPosition())) return;
 
         BlockPos pos = player.getPosition().add(-(dist/2) + rand.nextInt(dist), 0, -(dist/2) + rand.nextInt(dist));
         ((ServerWorld) world).addLightningBolt(new LightningBoltEntity(world, (double) pos.getX() + 0.5D, pos.getY(), (double) pos.getZ() + 0.5D, false));
@@ -191,13 +191,13 @@ public class PlayerHelper
         if (!net.minecraftforge.common.ForgeHooks.onTravelToDimension(player, destination)) return;
 
         DimensionType dimensiontype = serverPlayer.dimension;
-        ServerWorld serverworld = serverPlayer.server.func_71218_a(dimensiontype);
+        ServerWorld serverworld = serverPlayer.server.getWorld(dimensiontype);
         serverPlayer.dimension = destination;
-        ServerWorld serverworld1 = serverPlayer.server.func_71218_a(destination);
+        ServerWorld serverworld1 = serverPlayer.server.getWorld(destination);
         WorldInfo worldinfo = serverPlayer.world.getWorldInfo();
         net.minecraftforge.fml.network.NetworkHooks.sendDimensionDataPacket(serverPlayer.connection.netManager, serverPlayer);
 
-        serverPlayer.connection.sendPacket(new SRespawnPacket(destination, worldinfo.getGenerator(), serverPlayer.interactionManager.getGameType()));
+        serverPlayer.connection.sendPacket(new SRespawnPacket(destination, WorldInfo.byHashing(worldinfo.getSeed()), worldinfo.getGenerator(), serverPlayer.interactionManager.getGameType()));
         serverPlayer.connection.sendPacket(new SServerDifficultyPacket(worldinfo.getDifficulty(), worldinfo.isDifficultyLocked()));
 
         PlayerList playerlist = serverPlayer.server.getPlayerList();
@@ -205,9 +205,9 @@ public class PlayerHelper
         serverworld.removeEntity(serverPlayer, true); //Forge: the player entity is moved to the new world, NOT cloned. So keep the data alive with no matching invalidate call.
         serverPlayer.revive();
 
-        double d0 = serverPlayer.posX;
-        double d1 = serverPlayer.posY;
-        double d2 = serverPlayer.posZ;
+        double d0 = serverPlayer.getPosX();
+        double d1 = serverPlayer.getPosY();
+        double d2 = serverPlayer.getPosZ();
         float f = serverPlayer.rotationPitch;
         float f1 = serverPlayer.rotationYaw;
         float f2 = f1;
@@ -231,10 +231,10 @@ public class PlayerHelper
 
         serverPlayer.setWorld(serverworld1);
         serverworld1.func_217447_b(serverPlayer);
-        serverPlayer.connection.setPlayerLocation(serverPlayer.posX, serverPlayer.posY, serverPlayer.posZ, f1, f);
-        serverPlayer.interactionManager.func_73080_a(serverworld1);
+        serverPlayer.connection.setPlayerLocation(serverPlayer.getPosX(), serverPlayer.getPosY(), serverPlayer.getPosZ(), f1, f);
+        serverPlayer.interactionManager.setWorld(serverworld1);
         serverPlayer.connection.sendPacket(new SPlayerAbilitiesPacket(serverPlayer.abilities));
-        playerlist.func_72354_b(serverPlayer, serverworld1);
+        playerlist.sendWorldInfo(serverPlayer, serverworld1);
         playerlist.sendInventory(serverPlayer);
 
         for(EffectInstance effectinstance : serverPlayer.getActivePotionEffects()) {

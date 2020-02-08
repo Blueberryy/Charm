@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -31,12 +32,12 @@ public class CrateOpenBlock extends CrateBaseBlock
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
         if (world.isRemote) {
-            return true;
+            return ActionResultType.PASS;
         } else if (player.isSpectator()) {
-            return true;
+            return ActionResultType.PASS;
         } else {
             TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof CrateTileEntity) {
@@ -44,9 +45,9 @@ public class CrateOpenBlock extends CrateBaseBlock
                 crate.fillWithLoot(player);
                 player.openContainer(crate);
                 /* @todo stats, see ShulkerBoxBlock */
-                return true;
+                return ActionResultType.SUCCESS;
             }
-            return false;
+            return ActionResultType.FAIL;
         }
     }
 

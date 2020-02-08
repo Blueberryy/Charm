@@ -6,6 +6,7 @@ import net.minecraft.entity.villager.IVillagerType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.feature.structure.VillageConfig;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -31,10 +32,10 @@ public class MoreVillageBiomes extends MesonModule
     @Override
     public void setup(FMLCommonSetupEvent event)
     {
-        taigaBiomes.forEach(biome -> biome.addStructure(VILLAGE, new VillageConfig("village/taiga/town_centers", 6)));
+        taigaBiomes.forEach(biome -> biome.addStructure(VILLAGE.withConfiguration(new VillageConfig("village/taiga/town_centers", 6))));
 
         // there isn't dedicated structure pieces for jungles and swamps so just use plains
-        plainsBiomes.forEach(biome -> biome.addStructure(VILLAGE, new VillageConfig("village/plains/town_centers", 6)));
+        plainsBiomes.forEach(biome -> biome.addStructure(VILLAGE.withConfiguration(new VillageConfig("village/plains/town_centers", 6))));
     }
 
     @SubscribeEvent
@@ -49,7 +50,7 @@ public class MoreVillageBiomes extends MesonModule
             VillagerData data = villager.getVillagerData();
 
             if (data.getType() == IVillagerType.PLAINS) {
-                Biome biome = WorldHelper.getBiomeAtPos(event.getWorld(), event.getEntity().getPosition());
+                Biome biome = WorldHelper.getBiomeAtPos((ServerWorld)event.getWorld(), event.getEntity().getPosition());
 
                 if (plainsBiomes.contains(biome)) {
                     villager.setVillagerData(data.withType(IVillagerType.byBiome(biome)));

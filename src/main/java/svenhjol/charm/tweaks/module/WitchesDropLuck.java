@@ -34,7 +34,7 @@ public class WitchesDropLuck extends MesonModule
         ) {
             Entity entity = event.getEntity();
             ItemStack potion = PotionHelper.getPotionItemStack(Potions.LUCK, 1);
-            event.getDrops().add( new ItemEntity(entity.getEntityWorld(), entity.posX, entity.posY, entity.posZ, potion) );
+            event.getDrops().add( new ItemEntity(entity.getEntityWorld(), entity.getPosX(), entity.getPosY(), entity.getPosZ(), potion) );
         }
     }
 }

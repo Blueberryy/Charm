@@ -16,7 +16,7 @@ import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.objectweb.asm.Type;
-import svenhjol.meson.compat.QuarkModules;
+// import svenhjol.meson.compat.QuarkModules;
 import svenhjol.meson.handler.PlayerQueueHandler;
 import svenhjol.meson.helper.ForgeHelper;
 import svenhjol.meson.iface.Module;
@@ -36,7 +36,7 @@ public abstract class MesonLoader
 
     private ModuleLoader moduleLoader;
     private ConfigLoader configLoader;
-    private static QuarkModules quarkModules;
+    private static String quarkModules;
 
     protected IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
     protected IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
@@ -82,7 +82,7 @@ public abstract class MesonLoader
         // compatibility for checking Quark modules are loaded
         try {
             if (quarkModules == null && ForgeHelper.isModLoaded("quark")) {
-                quarkModules = QuarkModules.class.newInstance();
+                // quarkModules = QuarkModules.class.newInstance();
             }
         } catch (Exception e) {
             throw new RuntimeException("Error loading QuarkModules");
@@ -168,7 +168,7 @@ public abstract class MesonLoader
         String mod = res.getPath();
 
         if (inst.equals("quark") && quarkModules != null) {
-            return quarkModules.hasModule(mod);
+//            return quarkModules.hasModule(mod);
         }
 
         if (instances.containsKey(inst)) {

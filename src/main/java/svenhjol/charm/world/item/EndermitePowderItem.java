@@ -8,6 +8,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import svenhjol.charm.world.entity.EndermitePowderEntity;
 import svenhjol.meson.MesonItem;
 import svenhjol.meson.MesonModule;
@@ -41,13 +42,13 @@ public class EndermitePowderItem extends MesonItem
 
         // server
         if (!worldIn.isRemote) {
-            BlockPos pos = worldIn.findNearestStructure("EndCity", playerIn.getPosition(), 1500, true);
+            BlockPos pos = ((ServerWorld)worldIn).findNearestStructure("EndCity", playerIn.getPosition(), 1500, true);
             if (pos != null) {
                 EndermitePowderEntity entity = new EndermitePowderEntity(worldIn, pos.getX(), pos.getZ());
                 Vec3d look = playerIn.getLookVec();
-                entity.setPosition(playerIn.posX + look.x * 2, playerIn.posY + 0.5, playerIn.posZ + look.z * 2);
+                entity.setPosition(playerIn.getPosX() + look.x * 2, playerIn.getPosY() + 0.5, playerIn.getPosZ() + look.z * 2);
                 worldIn.addEntity(entity);
-                worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_ENDER_EYE_LAUNCH, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                worldIn.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_ENDER_EYE_LAUNCH, SoundCategory.PLAYERS, 1.0F, 1.0F);
             }
         }
 

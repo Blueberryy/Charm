@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -52,9 +53,9 @@ public class BookshelfChestBlock extends MesonBlock
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        if (world.isRemote || player.isSpectator()) return true;
+        if (world.isRemote || player.isSpectator()) return ActionResultType.PASS;
 
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof BookshelfChestTileEntity) {
@@ -62,9 +63,9 @@ public class BookshelfChestBlock extends MesonBlock
             bookshelfChest.fillWithLoot(player);
             player.openContainer(bookshelfChest);
             /* @todo stats, see ShulkerBoxBlock */
-            return true;
+            return ActionResultType.SUCCESS;
         }
-        return false;
+        return ActionResultType.FAIL;
     }
 
     @Override

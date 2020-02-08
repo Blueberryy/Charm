@@ -54,10 +54,10 @@ public class CharmAsmHooks
         Salvage.itemDamaged(stack, amount, player);
     }
 
-    public static boolean isSkyLightMax(IWorld world, BlockPos pos)
+    public static boolean canSeeSky(IWorld world, BlockPos pos)
     {
-        if (!Charm.hasModule(HuskImprovements.class) || !HuskImprovements.spawnAnywhere) return world.isSkyLightMax(pos);
-        return HuskImprovements.isSkyLightMax(world, pos);
+        if (!Charm.hasModule(HuskImprovements.class) || !HuskImprovements.spawnAnywhere) return world.canSeeSky(pos);
+        return HuskImprovements.canSeeSky(world, pos);
     }
 
     public static void composterOutput(World world, BlockPos pos, PlayerEntity player)

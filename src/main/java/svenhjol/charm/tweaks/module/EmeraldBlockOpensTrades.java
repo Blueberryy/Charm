@@ -22,7 +22,7 @@ public class EmeraldBlockOpensTrades extends MesonModule
     {
         if (event.getPlayer() != null
             && event.getTarget() instanceof VillagerEntity
-            && event.getPlayer().isSneaking()
+            && event.getPlayer().isCrouching()
             && event.getPlayer().getHeldItem(event.getHand()).getItem() == Items.EMERALD_BLOCK
         ) {
             PlayerEntity player = event.getPlayer();

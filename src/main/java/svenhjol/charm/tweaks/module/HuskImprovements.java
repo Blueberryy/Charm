@@ -30,7 +30,7 @@ public class HuskImprovements extends MesonModule
 
     public static double lootingBoost = 0.1D;
 
-    public static boolean isSkyLightMax(IWorld world, BlockPos pos)
+    public static boolean canSeeSky(IWorld world, BlockPos pos)
     {
         return true; // don't care about skylight check for spawning husks
     }
@@ -45,7 +45,7 @@ public class HuskImprovements extends MesonModule
         ) {
             Entity entity = event.getEntity();
             ItemStack sand = new ItemStack(Items.SAND);
-            event.getDrops().add( new ItemEntity(entity.getEntityWorld(), entity.posX, entity.posY, entity.posZ, sand) );
+            event.getDrops().add( new ItemEntity(entity.getEntityWorld(), entity.getPosX(), entity.getPosY(), entity.getPosZ(), sand) );
         }
     }
 }

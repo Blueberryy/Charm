@@ -25,7 +25,7 @@ import svenhjol.charm.base.CharmCategories;
 import svenhjol.charm.world.block.RunePortalBlock;
 import svenhjol.charm.world.block.RunePortalFrameBlock;
 import svenhjol.charm.world.client.renderer.RunePortalTileEntityRenderer;
-import svenhjol.charm.world.compat.QuarkRunes;
+// import svenhjol.charm.world.compat.QuarkRunes;
 import svenhjol.charm.world.message.ClientRunePortalAction;
 import svenhjol.charm.world.storage.RunePortalSavedData;
 import svenhjol.charm.world.tileentity.RunePortalTileEntity;
@@ -56,7 +56,7 @@ public class EndPortalRunes extends MesonModule
     @ObjectHolder("charm:rune_portal")
     public static TileEntityType<RunePortalTileEntity> tile;
 
-    private static QuarkRunes quarkRunes;
+    private static String quarkRunes;
 
     @Config(name = "Allow Eye of Ender removal", description = "If true, sneak-clicking with an empty hand or colored rune removes an eye of ender from its frame.")
     public static boolean allowEnderEyeRemoval = true;
@@ -83,7 +83,7 @@ public class EndPortalRunes extends MesonModule
 
         try {
             if (ForgeHelper.isModLoaded("quark")) {
-                quarkRunes = QuarkRunes.class.newInstance();
+                // quarkRunes = QuarkRunes.class.newInstance();
             }
         } catch (Exception e) {
             throw new RuntimeException("Error loading QuarkRunes");
@@ -94,7 +94,7 @@ public class EndPortalRunes extends MesonModule
     @Override
     public void setupClient(FMLClientSetupEvent event)
     {
-        ClientRegistry.bindTileEntitySpecialRenderer(RunePortalTileEntity.class, new RunePortalTileEntityRenderer());
+        ClientRegistry.bindTileEntityRenderer(RunePortalTileEntity.class, new RunePortalTileEntityRenderer());
     }
 
     @Override
@@ -123,7 +123,7 @@ public class EndPortalRunes extends MesonModule
             ItemStack toDrop = null;
             ItemStack held = player.getHeldItem(hand);
 
-            if (quarkRunes.isRune(held) && !player.isSneaking()) {
+            if (quarkRunes.isRune(held) && !player.isCrouching()) {
 
                 // if end portal frame, drop eye of ender
                 if (isVanilla && state.get(EndPortalFrameBlock.EYE)) {
@@ -144,7 +144,7 @@ public class EndPortalRunes extends MesonModule
                 addRune(serverWorld, pos, held, player);
                 activate(serverWorld, pos);
 
-            } else if (player.isSneaking()) {
+            } else if (player.isCrouching()) {
 
                 if (isVanilla && allowEnderEyeRemoval && state.get(EndPortalFrameBlock.EYE)) {
                     toDrop = new ItemStack(Items.ENDER_EYE);

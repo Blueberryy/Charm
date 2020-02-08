@@ -9,6 +9,7 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.server.ServerWorld;
 import svenhjol.meson.iface.IMesonEnum;
 
 public class WorldHelper
@@ -53,10 +54,10 @@ public class WorldHelper
         return d2 * d2 + d3 * d3;
     }
 
-    public static Biome getBiomeAtPos(World world, BlockPos pos)
+    public static Biome getBiomeAtPos(ServerWorld world, BlockPos pos)
     {
-        // world.getBiome() suffers from infinite badness when game loading
-        return world.getChunkProvider().getChunkGenerator().getBiomeProvider().getBiome(pos);
+        // world.getBiome() suffers from infinite badness when game loading - TODO check this converted to 1.15 correctly!
+        return world.getChunkProvider().getChunkGenerator().getBiomeProvider().getNoiseBiome(pos.getX(), pos.getY(), pos.getZ());
     }
 
     public static int getDimensionId(World world)

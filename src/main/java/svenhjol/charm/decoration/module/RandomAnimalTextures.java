@@ -1,6 +1,7 @@
 package svenhjol.charm.decoration.module;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -42,7 +43,7 @@ public class RandomAnimalTextures extends MesonModule
     {
         if (isEnabled()) {
             //noinspection unchecked
-            RenderingRegistry.registerEntityRenderingHandler(WolfEntity.class, CustomWolfRenderer.factory());
+            RenderingRegistry.registerEntityRenderingHandler(EntityType.WOLF, CustomWolfRenderer.factory());
         }
     }
 
